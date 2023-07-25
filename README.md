@@ -2,6 +2,8 @@
 A photo gallery app made with Vue.js for WordPress based backend with an option to use OriginStamp API. 
 Not a standalone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
 
+Especially the UI of this Vue implementation is heavily based on the work by Emre Güney, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
+
 Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)**
 
 ## Features:
