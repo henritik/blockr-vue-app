@@ -11,9 +11,9 @@
       </button>
       <div class="col closeable">
         <label class="pl-2 pt-1">
-          <font-awesome-icon :icon="['fas', 'fa-images']" />Albums</label
-        >
-        <div class="grid py-1 px-1">
+          <font-awesome-icon :icon="['fas', 'fa-images']" />Albums
+        </label>
+        <div :v-if="!closed" class="grid py-1 px-1">
           <AsideCard v-for="item in albums" :key="item.id" :album="item" />
         </div>
       </div>
@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       closed: false,
-      initialWidth: 0,
     };
   },
   components: {
@@ -48,9 +47,8 @@ export default {
     else if (showAlbumSection) {
       this.closed = Boolean(showAlbumSection);
     }
-    this.initialWidth = window.innerWidth;
-    window.addEventListener("resize", this.onResize);
     this.$store.commit("setAlbumsSectionOnMobile", false);
+    this.resizeListener();
   },
   methods: {
     toggleSection() {
@@ -61,13 +59,19 @@ export default {
       } else {
         this.$store.commit("setAlbumsSectionOnMobile", false);
       }
+      this.resizeListener();
     },
     onResize() { 
-      if (window.innerWidth < 800 && this.initialWidth > 800) {
+      if (window.innerWidth < 800) {
         this.closed = true;
         this.$store.commit("setAlbumsSectionOnMobile", false);
+      } 
+    },
+    resizeListener() {
+      if (!this.closed && window.innerWidth > 800) {
+        window.addEventListener("resize", this.onResize);
       } else {
-        this.initialWidth = window.innerWidth;
+        window.removeEventListener('resize', this.onResize);
       }
     }
   },
