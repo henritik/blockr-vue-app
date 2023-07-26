@@ -5,9 +5,10 @@
       <masonry-wall 
         v-if="load && getPhotosFromStorage"
         :items="getPhotosFromStorage" 
-        :column-width="300" 
+        :column-width="270" 
         :max-columns="5"
-        :gap="20"
+        :gap="15"
+        :ssr-columns="5"
       >
       <template v-slot:default="{ item }">
         <CardComponent :data="item"/>
@@ -54,7 +55,9 @@
     },
     methods: {
       async fetchMore() {
-        await this.$store.dispatch("fetchMore");
+        if (!this.$store.getters.getFetchStatus) {
+          await this.$store.dispatch("fetchMore");
+        }
       }
     },
     computed: {
@@ -65,14 +68,12 @@
     async updated() {
       await nextTick();
       if (this.load) {
-        setTimeout(() => {
-          window.onscroll = () => {
-            const div = document.querySelector(".content-inner");
-            if (window.innerHeight + window.scrollY >= div.offsetHeight) {
-              this.fetchMore();
-            }
-          };
-        }, 500);
+        window.onscroll = () => {
+          const div = document.querySelector(".content-inner");
+          if (window.innerHeight + window.scrollY >= div.offsetHeight) {
+            this.fetchMore();
+          }
+        };
       }
     },
     watch: {
