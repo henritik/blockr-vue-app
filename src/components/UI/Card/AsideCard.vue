@@ -14,7 +14,7 @@
         <div
           class="cover"
           :style="{
-            backgroundImage: `url(${Object.values(this.album)[0].category_image})`,
+            backgroundImage: `url(${Object.values(this.album)[0].category_image + getAdditionalExt})`,
           }"
           v-show="load"
         ></div>
@@ -46,6 +46,11 @@ export default {
     setTimeout(() => {
       this.load = true;
     }, 500);
+  },
+  computed: {
+    getAdditionalExt() {
+      return process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_THUMB;
+    },
   },
 };
 </script>
