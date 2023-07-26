@@ -30,6 +30,7 @@ const urlGenerator = (newUrl) => {
 
 export default {
   async fetchAll({ getters, commit }) {
+    commit("setFetchStatus", true);
     commit("setPhotosTimeline", null);
     commit("setMode", "fetchAll");
     commit("setAlbumState", false);
@@ -120,7 +121,10 @@ export default {
       ]);
     } catch (error) {
       console.log(error);
-    }   
+    }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 500); 
   },
   async search({ getters, commit }, payload) {
     commit("setPhotosTimeline", null);
@@ -154,6 +158,9 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 500); 
   },
   async album({ getters, commit }, payload) {
     commit("setPhotosTimeline", null);
@@ -193,6 +200,9 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 500); 
   },
   async setTags({ getters, commit }, payload) {
     commit("setPhotosTimeline", null);
@@ -226,6 +236,9 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 500); 
   },
   async fetchMore({ getters, commit } ) {
     commit("setInitialLoad", false);
@@ -337,8 +350,10 @@ export default {
           console.log(error);
         }
       }
-    } 
-    commit("setFetchStatus", false);
+    }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 3000);
   },
   destroySearching({ commit, dispatch }) {
     commit("setSearchText", null);
