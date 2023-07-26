@@ -4,7 +4,7 @@
   >
     <router-link :to="{ name: 'photo', params: { id: data.id } }">
       <div class="thumbnail">
-        <img :src="data.media_details.sizes.medium.source_url" class="img" loading="lazy"  />
+        <img :src="data.media_details.sizes.medium.source_url + getAdditionalExt" class="img" loading="lazy"  />
       </div>
     </router-link>
   </div>
@@ -24,6 +24,9 @@ export default {
   computed: {
     getLoadState() {
       return this.$store.getters.getInitialLoad;
+    },
+    getAdditionalExt() {
+      return process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_THUMB;
     },
   },
   mounted() {
