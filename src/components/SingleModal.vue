@@ -33,7 +33,7 @@
             </label>
           </div>
         <img
-          :src="photo.source_url"
+          :src="photo.source_url + getAdditionalExt"
           :alt="this.title"
           class="single-image"
           @load="imageload = true"
@@ -90,6 +90,9 @@ export default {
   computed: {
     getImageLoad() {
       return this.imageload;
+    },
+    getAdditionalExt() {
+      return process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_FULL;
     },
   },
   methods: {
