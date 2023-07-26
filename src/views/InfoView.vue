@@ -27,15 +27,19 @@
             It's more like an ideological principle and a proof-of-concept for myself as a developer, that this could be the right path to follow and continue to develop this project. 
           </p>
           <p>
-            If you would like to try this app on your own, feel free to download the source from the <a target="_blank" href="https://github.com/henritik">Github</a>.
-            Besides the app itself, you need the WordPress environment running anywhere, a small <a target="_blank" href="https://github.com/henritik/blockr-helper-plugin">helper plugin</a>
-            and <a target="_blank" href="https://wordpress.org/plugins/attachment-taxonomies/">Attachment Taxonomies</a> by Felix Arntz installed on the WordPress side.
-            I also made a new version of the <a target="_blank" href="https://github.com/henritik/osawp-plugin">WordpPress plugin</a> 
-            for using OriginStamp API, that you need to use blockchain based features. Besides of these, <a target="_blank" href="https://wordpress.org/plugins/media-library-assistant/">Media Library Assistant plugin</a> by David Lindgren can be very useful,
-            when there is need to handle bigger amount of photos at once.
+            If you wish to try this app on your own, feel free to download the source from <a target="_blank" href="https://github.com/henritik/blockr-vue-app">Github</a>.
+            Besides the app itself, you need a WordPress environment running anywhere, a small 
+            <a target="_blank" href="https://github.com/henritik/blockr-helper-plugin">helper plugin</a>
+            and <a target="_blank" href="https://wordpress.org/plugins/attachment-taxonomies/">Attachment Taxonomies</a>
+            plugin by Felix Arntz installed on the WordPress side. Alternatively, a bit more versatile plugin called
+            <a target="_blank" href="https://wordpress.org/plugins/media-library-assistant/">Media Library Assistant</a> 
+            by David Lindgren can be also used to create attachment taxonomies and can be very useful when there is need to handle bigger amount of photos.
+            If you wish to use OriginStamp timestamping service, you will also need my  
+            <a target="_blank" href="https://github.com/henritik/osawp-plugin">OriginStamp Attachments for WordPress</a> plugin.
           </p>
           <p>
-            Especially the UI design of this Vue implementation is based on the work by <a target="_blank" href="https://github.com/eeguney/vue-photogram-app">Emre Güney</a>, the photo gallery app for Pixabay API. 
+            Especially the UI of this Vue implementation is based on the work by Emre Güney,  
+            <a target="_blank" href="https://github.com/eeguney/vue-photogram-app">a photo gallery app for Pixabay API</a>. 
             As this project is published under the fully open MIT licence, you are wellcome to contribute and free to use this source to make your own implementations.
           </p>
           <p>
