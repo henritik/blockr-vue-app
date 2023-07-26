@@ -2,9 +2,10 @@
 A photo gallery app made with Vue.js for WordPress based backend with an option to use OriginStamp API. 
 Not a standalone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
 
-Especially the UI of this Vue implementation is heavily based on the work by Emre Güney, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
+Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
+Vue2 version of the **[Masonry Wall](https://github.com/DerYeger/yeger/tree/main/packages/vue2-masonry-wall)** implementation by **Yeger** is also used.
 
-Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)**
+Loaded live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)**
 
 ## Features:
 
@@ -15,7 +16,7 @@ Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info
  - Modal view with unlimited photo carousel
  - Descending and ascending orders
  - Infinite scroll
- - Masonry layout
+ - Masonry Wall layout
  - Filter by tags and safe search
  - Search photos
  - Dark and light modes
@@ -30,7 +31,7 @@ Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info
 
 - **Vue.js** 
 - **VueX, Vue Router**
-- **Masonry Layout Wall**
+- **Masonry Wall by Yeger**
 - **Pure SASS** and **SCSS**
 - **Fontawesome**
 
@@ -68,11 +69,27 @@ npm run lint
 
 ### Setting up env.locals
 ```
-VUE_APP_BASE_PATH = ** Your end path for the production app (if not "/") **
-VUE_APP_WP_URL = ** The full path of your WP-instance. NOTE! Without a slash at the end (e.g. https://yourdomain.com/wp ) **
-VUE_APP_API_URL = ** The base address for Rest API (if not "wp-json/wp/v2") **
-VUE_APP_UNSAFE_TAG_ID = ** The ID of your "unsafe" tag in WP **
+VUE_APP_BASE_PATH = <!-- Your end path for the production app (if not "/") -->
+VUE_APP_WP_URL = <!-- The full path of your WP-instance. NOTE! Without a slash at the end (e.g. "https://yourdomain.com/wp" ) -->
+VUE_APP_API_URL = <!-- The base address for Rest API (if not "wp-json/wp/v2") -->
+VUE_APP_UNSAFE_TAG_ID = <!-- The ID of your "unsafe" tag in WP -->
+VUE_APP_ADDITIONAL_FILE_EXTENSION_THUMB = <!-- Additional file extension for thumbnail images (e.g. ".webp"). This is an optional field -->
+VUE_APP_ADDITIONAL_FILE_EXTENSION_FULL = <!-- Additional file extension for full size images (e.g. ".webp"). This is an optional field -->
 ```
+
+### Changelog
+
+#### 1.0.0
+- Initial release
+
+#### 1.0.1
+- Added timeout lock and some other small performance related tweaks for fetchMore function
+
+- Minor performance optimization for Albums component
+
+- Small tweaks for Masonry Wall props
+
+- Option to use additional file extension for image optimization
 
 ## License:
 
