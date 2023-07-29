@@ -98,6 +98,8 @@ VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE = <!-- Additional file extension for lar
 
 - Small refactoring in SingleModal view
 
+- Added an option to show caption text in SingleModal view
+
 ## License:
 
 MIT License
