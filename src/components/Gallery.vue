@@ -8,7 +8,6 @@
         :column-width="270" 
         :max-columns="5"
         :gap="15"
-        :ssr-columns="5"
       >
       <template v-slot:default="{ item }">
         <CardComponent :data="item"/>
