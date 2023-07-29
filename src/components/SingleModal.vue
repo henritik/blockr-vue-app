@@ -96,9 +96,12 @@ export default {
       return this.imageInit;
     },
     getImgSrc() {
-      return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
-      
-    },
+      if (this.photo.media_details.sizes.large) {
+        return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
+      } else {
+        return this.photo.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
+      }
+    }
   },
   methods: {
     photoInit(id) {
