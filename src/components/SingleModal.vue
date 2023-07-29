@@ -47,7 +47,8 @@
         </div>
       </div>
         <footer class="row justify-center" v-show="getImageLoad">
-          <div v-if="renderComponent" class="title">{{ this.title }}</div>
+          <div v-if="title" class="title">{{ this.title }}</div>
+          <div v-if="caption" class="caption">{{ this.caption }}</div>
           <div v-if="blockchain" class="blockchain">
           <p class="proofed"><strong>The truth is not out there. It's right here.</strong> This image is proofed in <a :href="'https://etherscan.io/tx/'+ blockchain.timestamps[1].transaction" target="_blank">Ethereum blockchain</a>.
           Please see more details in the proof below.</p>
@@ -85,7 +86,7 @@ export default {
       imageLoad: false,
       imageInit: false,
       title: null,
-      renderComponent: true
+      caption: null
     };
   },
   computed: {
@@ -97,7 +98,7 @@ export default {
     },
     getImgSrc() {
       if (this.photo.media_details.sizes.large) {
-        return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
+        return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;    
       } else {
         return this.photo.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
       }
@@ -108,6 +109,7 @@ export default {
       const index = this.photos.findIndex( (e) => e['id'] === id );  
       this.photo = this.photos[index];
       this.title = this.photos[index].title.rendered;
+      this.caption = this.photos[index].caption.rendered.replace( /(<([^>]+)>)/ig, '');
       this.imageInit = true;
     },
     closeModal() {
@@ -286,17 +288,7 @@ header {
     justify-content: space-between;
     align-items: center;
   }
-  .title {
-    text-transform: capitalize;
-    font-size: 14px;
-    font-weight: 600;
-    width: 100%;
-  }
-  .blockchain {
-    display: block;
-    font-weight: 600;
-    width: 100%;
-  }
+  
   .social {
     align-items: center;
     li {
@@ -315,6 +307,22 @@ header {
 }
 footer {
   justify-content: center;
+
+  .title {
+    font-size: 1em;
+    font-weight: 600;
+    width: 100%;
+  }
+  .caption {
+    font-size: 0.85em;
+    font-weight: 500;
+    line-height: 2.5em;
+  }
+  .blockchain {
+    display: block;
+    font-weight: 500;
+    width: 100%;
+  }
 }
 .proofed {
   font-size: 0.85em;
