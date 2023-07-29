@@ -28,18 +28,19 @@
           </header>
         <div class="photo-container" v-show="getImageLoad">
           <div class="nav-arrow left">
-            <label v-if="photos.length > 1" @click="prevPhoto">
+            <label v-if="photos.length > 1" @click="nextPhoto('prev')">
               <font-awesome-icon :icon="['fas', 'fa-chevron-left']" size="xl"/>
             </label>
           </div>
         <img
-          :src="photo.source_url + getAdditionalExt"
-          :alt="this.title"
+          v-if="getImageInit"
+          :src="getImgSrc"
+          :alt="title"
           class="single-image"
-          @load="imageload = true"
+          @load="imageLoad = true"
         />
           <div class="nav-arrow right">
-            <label v-if="photos.length > 1" @click="nextPhoto">
+            <label v-if="photos.length > 1" @click="nextPhoto('next')">
               <font-awesome-icon :icon="['fas', 'fa-chevron-right']" size="xl"/>
             </label>
           </div>
@@ -59,7 +60,6 @@
       </div>
   </div>
 </template>
-
 <script>
 
 import Loading from "@/components/UI/Loading.vue";
@@ -82,17 +82,23 @@ export default {
       photo: [],
       likes: null,
       blockchain: false,
-      imageload: false,
+      imageLoad: false,
+      imageInit: false,
       title: null,
       renderComponent: true
     };
   },
   computed: {
     getImageLoad() {
-      return this.imageload;
+      return this.imageLoad;
     },
-    getAdditionalExt() {
-      return process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_FULL;
+    getImageInit() {
+      return this.imageInit;
+    },
+    getImgSrc() {
+      console.log(this.photo);
+      return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
+      
     },
   },
   methods: {
@@ -100,6 +106,7 @@ export default {
       const index = this.photos.findIndex( (e) => e['id'] === id );  
       this.photo = this.photos[index];
       this.title = this.photos[index].title.rendered;
+      this.imageInit = true;
     },
     closeModal() {
       if (this.$store.getters.getMode === "album") {
@@ -108,23 +115,20 @@ export default {
         this.$router.push({ name: 'homeAfter'});
       }
     },
-    nextPhoto() {
+    nextPhoto(dir) {
+      this.imageLoad = false;
+      this.imageInit = false;
       const i = this.photos.findIndex( (e) => e['id'] === this.photo.id );
-      let nextIndex = null;
-      this.photos.length > i + 1 ? nextIndex = i + 1 : nextIndex = 0;
-      this.$router.push({ name: 'photo', params: { id: this.photos[nextIndex].id } });
-      this.photoInit(this.photos[nextIndex].id);
-      this.getLikes(this.photos[nextIndex].id);
-      this.getBlockchain(this.photos[nextIndex].id);
-    },
-    prevPhoto() {      
-      const i = this.photos.findIndex( (e) => e['id'] === this.photo.id );
-      let prevIndex = null;
-      i > 0 ? prevIndex = i - 1 : prevIndex = this.photos.length - 1;
-      this.$router.push({ name: 'photo', params: { id: this.photos[prevIndex].id } });
-      this.photoInit(this.photos[prevIndex].id);
-      this.getLikes(this.photos[prevIndex].id);
-      this.getBlockchain(this.photos[prevIndex].id);
+      let newIndex = null;
+      if (dir === "prev") {
+        i > 0 ? newIndex = i - 1 : newIndex = this.photos.length - 1;
+      } else {
+        this.photos.length > i + 1 ? newIndex = i + 1 : newIndex = 0;
+      }
+      this.$router.push({ name: 'photo', params: { id: this.photos[newIndex].id } });
+      this.photoInit(this.photos[newIndex].id);
+      this.getLikes(this.photos[newIndex].id);
+      this.getBlockchain(this.photos[newIndex].id);
     },
     openInNewTab(url) {
       window.open(url, '_blank', 'noreferrer');
@@ -188,11 +192,11 @@ export default {
       if (this.$route.name === "photo") {
         if (e.key === "ArrowRight" && this.photos.length > 1) {
           e.preventDefault(); 
-          this.nextPhoto();
+          this.nextPhoto("next");
         }
         else if (e.key === "ArrowLeft" && this.photos.length > 1) {
           e.preventDefault();
-          this.prevPhoto();
+          this.nextPhoto("prev");
         }
         else if (e.key === "Escape" || e.key === "Backspace") {
           e.preventDefault();  
@@ -209,7 +213,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .single-layout {
   height: 100%;
 
@@ -218,13 +221,13 @@ export default {
     margin: 0;
   }
   .single-image {
-    max-width: calc(100% - 60px);
+    width: calc(100% - 60px);
+    max-width: 1024px;
     border-radius: 1rem;
     box-shadow: 0 3px 18px -5px #000;
     background-color: var(--main-background-color);
     max-height: calc(100vh - 280px);
   }
-
   .photo-container {
     display: flex;
     flex-wrap: nowrap;
@@ -265,7 +268,6 @@ footer {
   text-align: center;
   flex-wrap: wrap;
   flex-direction: column;
-
 }
 button {
   color: #fff;
@@ -275,7 +277,6 @@ button {
   background-color: rgba(255, 255, 255, 0.5);
   }
 }
-
 header {
   .modal-control {
     display: flex;
@@ -316,15 +317,12 @@ footer {
 .proofed {
   font-size: 0.85em;
   a {
-    color: #a5a5a5;
     font-weight: 500;
-  a:hover {
-  color: #fff;
+    
   strong, .hash {
     display: block;
     font-weight: 500;
     }
-  }
   }
 }
 @keyframes backgroundChange {
