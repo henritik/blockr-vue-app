@@ -96,7 +96,6 @@ export default {
       return this.imageInit;
     },
     getImgSrc() {
-      console.log(this.photo);
       return this.photo.media_details.sizes.large.source_url + process.env.VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE;
       
     },
