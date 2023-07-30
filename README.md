@@ -3,9 +3,8 @@ A photo gallery app made with Vue.js for WordPress based backend with an option 
 Not a standalone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
 
 Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
-Vue2 version of the **[Masonry Wall](https://github.com/DerYeger/yeger/tree/main/packages/vue2-masonry-wall)** implementation by **Yeger** is also used.
 
-Loaded live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)**
+Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)** (heavily loaded and some older browsers might not working as using webp-images)
 
 ## Features:
 
@@ -31,9 +30,16 @@ Loaded live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkan
 
 - **Vue.js** 
 - **VueX, Vue Router**
-- **Masonry Wall by Yeger**
+- **Masonry Wall**
 - **Pure SASS** and **SCSS**
 - **Fontawesome**
+
+## Packages
+- [@yeger/vue2-masonry-wall](https://github.com/DerYeger/yeger/tree/main/packages/vue2-masonry-wall)
+- [@fortawesome](https://github.com/FortAwesome/vue-fontawesome)
+- [vue-clickaway](https://github.com/simplesmiler/vue-clickaway)
+- [vue-router](https://github.com/vuejs/router)
+- [vuex](https://github.com/vuejs/vuex)
 
 ## To-do:
 
