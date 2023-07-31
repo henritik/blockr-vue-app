@@ -4,7 +4,7 @@ Not a standalone solution, needs a WP environment running and a few **[Plugins](
 
 Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
 
-Live demo: **[https://henritikkanen.info/temp/blockr](https://henritikkanen.info/temp/blockr)** (heavily loaded and some older browsers might not working as using webp-images)
+Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.info/)** (heavily loaded)
 
 ## Features:
 
