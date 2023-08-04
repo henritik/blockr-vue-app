@@ -41,15 +41,15 @@
             Especially the UI of this Vue implementation is based on the work by Emre Güney,  
             <a target="_blank" href="https://github.com/eeguney/vue-photogram-app">a photo gallery app for Pixabay API</a>. 
             As this project is published under the fully open MIT licence, you are wellcome to contribute and free to use this source to make your own implementations.
-          </p>
-          <p>
-            You can contact me by sending an <a href="mailto:henri@henritikkanen.info">email</a> and if you would like to support this project, any amounts of Ethereums are welcome to following address: 
-            <b>0x8f2e099eF440FC7892e696791b43485260D919Ed</b>
+            Or if you have anything to ask about this project, feel free to send me a <a href="mailto:henri@henritikkanen.info">message</a>.
           </p>
           <p>
             With <span class="heart">♥</span> Henri Tikkanen
           </p>
-            <a class="github" href="https://github.com/henritik" target="blank"><font-awesome-icon :icon="['fab', 'fa-github']" size="2x"/></a>
+          <div class="logos">
+            <a class="github" href="https://github.com/henritik" target="blank"><font-awesome-icon :icon="['fab', 'fa-github']" size="3x"/></a>
+            <a href='https://ko-fi.com/H2H5NVO9K' target='_blank'><img class="kofi" src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' alt='Buy Me a Coffee at ko-fi.com' /></a>
+          </div>
         </div>
       </div>
     </LayoutComponent>
@@ -76,8 +76,23 @@
     font-size: 1.5em;
     color: red;
   }
+  .logos {
+    margin-top: 20px;
+  }
   .github {
-    width: 31px;
+    height: 48px;
+  }
+  .kofi {
+    height: 48px;
+    margin-left: 20px;
+    filter: saturate(0);
+    transition: all 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    &:hover {
+    filter: none;
+    }
+  }
+  .github .svg-inline--fa {
+    vertical-align: 0;
   }
   </style>
   
