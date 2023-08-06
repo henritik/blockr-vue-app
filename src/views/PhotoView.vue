@@ -63,7 +63,7 @@ export default {
           vm.$store.dispatch("album", [{ type: "album", value: vm.$route.params.album}]);
           vm.scrollToTop();
         });
-      break;
+        break;
 
       case "photo":
         next((vm) => {
@@ -83,8 +83,7 @@ export default {
     }
     if (to.name === "album" || to.name === "info") {
       this.$store.commit("setSearchText", null);
-      this.$store.commit("setActiveTags", []);
-      this.$store.commit("setInitialLoad", true);
+      this.$store.commit("setActiveTags", []); 
       next();
     }
     next();
