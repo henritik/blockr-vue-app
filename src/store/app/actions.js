@@ -37,7 +37,6 @@ export default {
     commit("setInitialLoad", true);
     let albums = getters.getAlbums;
     let tags = getters.getTags;
-
     if ( !albums.length ) {
       try {  
         await Promise.all([
@@ -48,11 +47,13 @@ export default {
               { type: "page", value: 1 }
             ])
           ).then(({ data }) => {
-            data.forEach((element) => {
-              if (element.count > 0) {            
-                albums.push({ [element.id]: element });           
-              }
-            });
+            if (data.length) {
+              data.forEach((element) => {
+                if (element.count > 0) {            
+                  albums.push({ [element.id]: element });           
+                }
+              });
+            }
             albums.reverse();
             commit("setAlbums", albums);
           })
@@ -71,11 +72,13 @@ export default {
               { type: "page", value: 1 }
             ])
           ).then(({ data }) => {
-            data.forEach((element) => {
-              if (element.count > 0) { 
-                tags.push(element);                 
-              }       
-            });
+            if (data.length) {
+              data.forEach((element) => {
+                if (element.count > 0) { 
+                  tags.push(element);                 
+                }       
+              });
+            }
             commit("setTags", tags);
           }),
         ]);
@@ -87,13 +90,11 @@ export default {
       try {  
         await Promise.all([
           Axios.get(
-            `${baseURL}/${apiURL}/${urlParameters.endpoint}?attachment_tag=${unsafeTag}`
-          ).then(({ data }) => {
-            if (data) {
-              if (data.length > 0) {
-                commit("setUnsafe", data);
-              }
-            }
+            `${baseURL}/${apiURL}/media?attachment_tag=${unsafeTag}&per_page=100`
+          ).then(({ data }) => {          
+            if (data.length) {
+              commit("setUnsafe", data);
+            }     
           }),
         ]);
       } catch (error) {
@@ -110,48 +111,14 @@ export default {
             { type: "order", value: getters.getOrder }
           ])
         ).then(({ data, headers }) => {
-          if ( getters.getSafemode ) {
-            getters.getUnsafe.forEach((element) => {
-              data = data.filter(e => e.id !== element.id);        
-            });
-          } 
-          commit("setPhotosTimeline", data);
-          urlParameters.totalPosts = headers['x-wp-total'];
-        })
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
-    setTimeout(() => {
-      commit("setFetchStatus", false);
-    }, 500); 
-  },
-  async search({ getters, commit }, payload) {
-    commit("setPhotosTimeline", null);
-    commit("setActiveTags", []);
-    commit("setSearchText", payload);
-    commit("setMode", "search");
-    commit("setInitialLoad", true);
-
-    try {
-      await Promise.all([
-        Axios.get(
-          urlGenerator([
-            { type: "endpoint", value: "media/search/" + encodeURIComponent(payload) },
-            { type: "perPage", value: 20 },
-            { type: "page", value: 1 },
-            { type: "order", value: getters.getOrder }
-          ])
-        ).then(({ data }) => {
-          if (data) {
-            if (data.length > 0) { 
-              if ( getters.getSafemode ) {
-                getters.getUnsafe.forEach((element) => {
-                  data = data.filter(e => e.id !== element.id);       
-                });
-              }             
-              commit("setPhotosTimeline", data);
-            }
+          if (data.length) {
+            if ( getters.getSafemode ) {
+              getters.getUnsafe.forEach((element) => {
+                data = data.filter(e => e.id !== element.id);        
+              });
+            } 
+            commit("setPhotosTimeline", data);
+            urlParameters.totalPosts = headers['x-wp-total'];
           }
         })
       ]);
@@ -162,13 +129,47 @@ export default {
       commit("setFetchStatus", false);
     }, 500); 
   },
+
+  async search({ getters, commit }, payload) {
+    commit("setPhotosTimeline", null);
+    commit("setActiveTags", []);
+    commit("setSearchText", payload);
+    commit("setMode", "search");
+    commit("setInitialLoad", true);
+    try {
+      await Promise.all([
+        Axios.get(
+          urlGenerator([
+            { type: "endpoint", value: "media/search/" + encodeURIComponent(payload) },
+            { type: "perPage", value: 20 },
+            { type: "page", value: 1 },
+            { type: "order", value: getters.getOrder }
+          ])
+        ).then(({ data }) => {
+          if (data.length) { 
+            if ( getters.getSafemode ) {
+              getters.getUnsafe.forEach((element) => {
+                data = data.filter(e => e.id !== element.id);       
+              });
+            }             
+            commit("setPhotosTimeline", data);
+          }
+        })
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+    setTimeout(() => {
+      commit("setFetchStatus", false);
+    }, 500); 
+  },
+
   async album({ getters, commit }, payload) {
     commit("setPhotosTimeline", null);
     commit("setAlbumInfo", null);
-    commit("setInitialLoad", true);
     commit("setMode", "album");
     commit("setAlbumState", payload[0].value);
-
+    commit("setInitialLoad", true);
     try {
       await Promise.all([
         Axios.get( 
@@ -184,16 +185,14 @@ export default {
             { type: "order", value: "desc" }
         ]) + `&attachment_category=${payload[0].value}`    
         ).then(({ data, headers }) => {
-          if (data) {
-            if (data.length > 0) {
-              if ( getters.getSafemode ) {
-                getters.getUnsafe.forEach((element) => {
-                  data = data.filter(e => e.id !== element.id);       
-                });
-              }
-              commit("setPhotosTimeline", data);
-              urlParameters.totalPosts = headers['x-wp-total'];
+          if (data.length) {
+            if ( getters.getSafemode ) {
+              getters.getUnsafe.forEach((element) => {
+                data = data.filter(e => e.id !== element.id);
+              });
             }
+            commit("setPhotosTimeline", data);
+            urlParameters.totalPosts = headers['x-wp-total'];
           }
         })
       ]);
@@ -204,12 +203,12 @@ export default {
       commit("setFetchStatus", false);
     }, 500); 
   },
+
   async setTags({ getters, commit }, payload) {
     commit("setPhotosTimeline", null);
     commit("setSearchText", null);
     commit("setInitialLoad", true);
     commit("setMode", "tags");
-
     try {
       await Promise.all([
         Axios.get(
@@ -220,16 +219,14 @@ export default {
             { type: "order", value: getters.getOrder }
           ]) + `&attachment_tag=${payload.toString()}`
         ).then(({ data, headers }) => {
-          if (data) {
-            if (data.length > 0) {
-              if ( getters.getSafemode ) {
-                getters.getUnsafe.forEach((element) => {
-                  data = data.filter(e => e.id !== element.id);       
-                });
-              }
-              commit("setPhotosTimeline", data);
-              urlParameters.totalPosts = headers['x-wp-total'];
+          if (data.length) {
+            if ( getters.getSafemode ) {
+              getters.getUnsafe.forEach((element) => {
+                data = data.filter(e => e.id !== element.id);       
+              });
             }
+            commit("setPhotosTimeline", data);
+            urlParameters.totalPosts = headers['x-wp-total'];
           }
         })     
       ]);
@@ -240,6 +237,7 @@ export default {
       commit("setFetchStatus", false);
     }, 500); 
   },
+
   async fetchMore({ getters, commit } ) {
     commit("setInitialLoad", false);
     if ( urlParameters.totalPosts > ( urlParameters.page * urlParameters.perPage ) && !getters.getBackdrop) {
@@ -255,15 +253,13 @@ export default {
                 { type: "order", value:  getters.getOrder }
               ])  
             ).then(({ data }) => {
-              if (data) {
-                if (data.length > 0) {
-                  if ( getters.getSafemode ) {
-                    getters.getUnsafe.forEach((element) => {
-                      data = data.filter(e => e.id !== element.id);
-                    });
-                  } 
-                  commit("morePhotosTimeline", data);
-                }
+              if (data.length) {
+                if ( getters.getSafemode ) {
+                  getters.getUnsafe.forEach((element) => {
+                    data = data.filter(e => e.id !== element.id);
+                  });
+                } 
+                commit("morePhotosTimeline", data);
               }
             })
           ]);
@@ -281,15 +277,13 @@ export default {
                 { type: "order", value: "desc" }
               ]) + `&attachment_category=${getters.getAlbumState}`    
             ).then(({ data }) => {
-              if (data) {
-                if (data.length > 0) {
-                  if ( getters.getSafemode ) {
-                    getters.getUnsafe.forEach((element) => {
-                      data = data.filter(e => e.id !== element.id);
-                    });
-                  } 
-                  commit("morePhotosTimeline", data);
-                }
+              if (data.length) {
+                if ( getters.getSafemode ) {
+                  getters.getUnsafe.forEach((element) => {
+                    data = data.filter(e => e.id !== element.id);
+                  });
+                } 
+                commit("morePhotosTimeline", data);
               }
             })
           ]);
@@ -307,15 +301,13 @@ export default {
                 { type: "order", value:  getters.getOrder }
               ]) + `&attachment_tag=${getters.getActiveTags.toString()}`    
             ).then(({ data }) => {
-              if (data) {
-                if (data.length > 0) {
-                  if ( getters.getSafemode ) {
-                    getters.getUnsafe.forEach((element) => {
-                      data = data.filter(e => e.id !== element.id);
-                    });
-                  } 
-                  commit("morePhotosTimeline", data);
-                }
+              if (data.length) {
+                if ( getters.getSafemode ) {
+                  getters.getUnsafe.forEach((element) => {
+                    data = data.filter(e => e.id !== element.id);
+                  });
+                } 
+                commit("morePhotosTimeline", data);
               }
             })
           ]);
@@ -325,8 +317,7 @@ export default {
       } else if (getters.getMode === "search") {
         try {
           await Promise.all([
-            Axios.get(
-              
+            Axios.get(  
               urlGenerator([
                 { type: "endpoint", value: "media/search/" + getters.getSearchText },
                 { type: "page", value: urlParameters.page + 1 },
@@ -334,15 +325,13 @@ export default {
                 { type: "order", value:  getters.getOrder }
               ])
             ).then(({ data }) => {
-              if (data) {
-                if (data.length > 0) {
-                  if ( getters.getSafemode ) {
-                    getters.getUnsafe.forEach((element) => {
-                      data = data.filter(e => e.id !== element.id);
-                    });
-                  } 
-                  commit("morePhotosTimeline", data);
-                }
+              if (data.length) {
+                if ( getters.getSafemode ) {
+                  getters.getUnsafe.forEach((element) => {
+                    data = data.filter(e => e.id !== element.id);
+                  });
+                } 
+                commit("morePhotosTimeline", data);
               }
             })
           ]);
@@ -355,20 +344,25 @@ export default {
       commit("setFetchStatus", false);
     }, 3000);
   },
+
   destroySearching({ commit, dispatch }) {
     commit("setSearchText", null);
     dispatch("fetchAll");
   },
+
   destroyTags({ commit, dispatch }) {
     commit("setActiveTags", []);
     dispatch("fetchAll");
   },
+
   setdarkmode({ commit }, payload) {
     commit("darkmode", payload);
   },
+
   setSafemode({ commit }, payload) {
     commit("safemode", payload);
   },
+  
   setOrder({ commit }, payload) {
     commit("setOrder", payload);
   }
