@@ -26,7 +26,7 @@
       v-if="load && !getPhotosFromStorage && $store.getters.getMode === 'search'"
       text="Ups... 😪 We couldn't find what you're looking for."
     />
-    <SingleModal :photos="getPhotosFromStorage" v-if="$route.name === 'photo'" />    
+    <SingleModal :photos="getPhotosFromStorage" v-if="$route.name === 'photo'" />
   </div>
 </template>
   
@@ -77,7 +77,7 @@
     },
     watch: {
       async getPhotosFromStorage(last) {
-        if (last === null || last === []) {
+        if (last === null || !last.length) {
           this.load = false;
         } else {
           setTimeout(() => {
@@ -86,7 +86,7 @@
         }
         setTimeout(() => {
           this.load = true;
-        }, 5000);
+        }, 3000);
       },
     }
   };
