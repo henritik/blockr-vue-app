@@ -1,6 +1,6 @@
-# Blockr Vue App
-A photo gallery app made with Vue.js for WordPress based backend with an option to use OriginStamp API. 
-Not a standalone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
+# Blockr Photo App
+A photo gallery app made with Vue.js to be used with WordPress based backend, with an option to use blockchain based timestamping by OriginStamp API.
+Not a stand-alone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
 
 Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
 
@@ -29,7 +29,8 @@ Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.i
 ## Technologies and tools:
 
 - **Vue.js** 
-- **VueX, Vue Router**
+- **VueX**
+- **Vue Router**
 - **Masonry Wall**
 - **Pure SASS** and **SCSS**
 - **Fontawesome**
