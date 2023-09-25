@@ -1,12 +1,10 @@
 # Blockr Photo App
 A photo gallery app made with Vue.js to be used with WordPress based backend, with an option to use blockchain based timestamping by OriginStamp API.
-Not a stand-alone solution, needs a WP environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed in WordPress.
-
-Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
+Needs a WordPress environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed.
 
 Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.info/)** (heavily loaded)
 
-## Features:
+## Features
 
  - Using **[WordPress API](https://developer.wordpress.org/rest-api/)** and **[OriginStamp API](https://docs.originstamp.com/api/)**
  - Supports to download proofs for stamped photos (needs a plugin installed in WP)
@@ -25,15 +23,6 @@ Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.i
  - Fully responsive design
  - Supports unlimited amount of photos
  - Supports up to 100 albums and tags
- 
-## Technologies and tools:
-
-- **Vue.js** 
-- **VueX**
-- **Vue Router**
-- **Masonry Wall**
-- **Pure SASS** and **SCSS**
-- **Fontawesome**
 
 ## Packages
 - [@yeger/vue2-masonry-wall](https://github.com/DerYeger/yeger/tree/main/packages/vue2-masonry-wall)
@@ -42,7 +31,7 @@ Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.i
 - [vue-router](https://github.com/vuejs/router)
 - [vuex](https://github.com/vuejs/vuex)
 
-## To-do:
+## To do
 
 - Vue 3 migration
 - Better photo ordering
@@ -111,8 +100,12 @@ VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE = <!-- Additional file extension for lar
 - Minor fixes and clean up
   
 - Ran npn audit fix for 2 moderate level vulnerabilities
+
+## Credits
+
+Especially the UI of this Vue implementation is based on the work by **Emre Güney**, **[a photo gallery app for Pixabay API](https://github.com/eeguney/vue-photogram-app)**. 
   
-## License:
+## License
 
 MIT License
 
