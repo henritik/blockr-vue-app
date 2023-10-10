@@ -72,6 +72,7 @@
                   <li>
                     <button
                       type="button"
+                      class="dark"
                       :class="{activeTheme: activeTheme(true)}"
                       aria-label="Dark theme"
                       @click="toggleDarkmode(true)"
@@ -82,6 +83,7 @@
                   <li>
                     <button
                       type="button"
+                      class="light"
                       :class="{activeTheme: activeTheme(false) }"
                       aria-label="Light theme"
                       @click="toggleDarkmode(false)"
@@ -285,16 +287,27 @@ header {
         button {
           color: var(--button-color);
           background-color: var(--third-background-color);
-          transition: all 0.1s ease;
+          transition: all 0.1s ease;          
           &:hover {
             background-color: var(--four-background-color);
           }
+        }
+        .dark {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
+          border-bottom-left-radius: 8px;
+        }
+        .light {
+          border-top-left-radius: 0px;
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+          border-bottom-left-radius: 0px;
         }
         ul {
           display: flex;
           padding: 0;
           margin: 0;
-          gap: 10px;
           margin: 1rem 0;
           justify-content: center;        
           li {
