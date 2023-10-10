@@ -95,7 +95,7 @@ export default {
               { type: "endpoint", value: "media" },
               { type: "perPage", value: 20 },
               { type: "page", value: 1 },
-              { type: "order", value: "desc" }
+              { type: "order", value: getters.getOrder }
             ]) + `&attachment_category=${ getters.getAlbums.map(e => Object.keys(e)).toString() }`
           ).then(({ data, headers }) => {
             if (data.length) {
