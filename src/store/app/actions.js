@@ -3,6 +3,7 @@ import Axios from "axios";
 const baseURL = process.env.VUE_APP_WP_URL;
 const apiURL = process.env.VUE_APP_API_URL;
 const unsafeTag = process.env.VUE_APP_UNSAFE_TAG_ID;
+const multiGalleryCat = process.env.VUE_APP_MULTI_GALLERY_CAT_ID;
 
 let urlParameters = {
   order: "desc",
@@ -37,6 +38,7 @@ export default {
     commit("setInitialLoad", true);
     let albums = getters.getAlbums;
     let tags = getters.getTags;
+
     if ( !albums.length ) {
       try {  
         await Promise.all([
@@ -48,39 +50,23 @@ export default {
             ])
           ).then(({ data }) => {
             if (data.length) {
-              data.forEach((element) => {
-                if (element.count > 0) {            
-                  albums.push({ [element.id]: element });           
-                }
-              });
+              if (multiGalleryCat) {
+                data.forEach((element) => {
+                  if (element.count > 0 && element.parent == multiGalleryCat) {         
+                    albums.push({ [element.id]: element });
+                  }
+                });
+              } else {
+                data.forEach((element) => {
+                  if (element.count > 0) {            
+                    albums.push({ [element.id]: element });
+                  }
+                });
+              }
             }
             albums.reverse();
             commit("setAlbums", albums);
           })
-        ]);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    if ( !tags.length ) {
-      try {  
-        await Promise.all([
-          Axios.get(
-            urlGenerator([
-              { type: "endpoint", value: "attachment_tag" },
-              { type: "perPage", value: 100 },
-              { type: "page", value: 1 }
-            ])
-          ).then(({ data }) => {
-            if (data.length) {
-              data.forEach((element) => {
-                if (element.count > 0) { 
-                  tags.push(element);                 
-                }       
-              });
-            }
-            commit("setTags", tags);
-          }),
         ]);
       } catch (error) {
         console.log(error);
@@ -101,29 +87,87 @@ export default {
         console.log(error);
       }
     } 
-    try {  
-      await Promise.all([    
-        Axios.get(
-          urlGenerator([
-            { type: "endpoint", value: "media" },
-            { type: "perPage", value: 20 },
-            { type: "page", value: 1 },
-            { type: "order", value: getters.getOrder }
-          ])
-        ).then(({ data, headers }) => {
-          if (data.length) {
-            if ( getters.getSafemode ) {
-              getters.getUnsafe.forEach((element) => {
-                data = data.filter(e => e.id !== element.id);        
+    if (multiGalleryCat) {
+      try {
+        await Promise.all([    
+          Axios.get(
+            urlGenerator([
+              { type: "endpoint", value: "media" },
+              { type: "perPage", value: 20 },
+              { type: "page", value: 1 },
+              { type: "order", value: "desc" }
+            ]) + `&attachment_category=${ getters.getAlbums.map(e => Object.keys(e)).toString() }`
+          ).then(({ data, headers }) => {
+            if (data.length) {
+              if ( getters.getSafemode ) {
+                getters.getUnsafe.forEach((element) => {
+                  data = data.filter(e => e.id !== element.id);
+                });
+              }
+              commit("setPhotosTimeline", data);     
+              urlParameters.totalPosts = headers['x-wp-total'];
+            }
+          })
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await Promise.all([    
+          Axios.get(
+            urlGenerator([
+              { type: "endpoint", value: "media" },
+              { type: "perPage", value: 20 },
+              { type: "page", value: 1 },
+              { type: "order", value: getters.getOrder }
+            ])
+          ).then(({ data, headers }) => {
+            if (data.length) {
+              if ( getters.getSafemode ) {
+                getters.getUnsafe.forEach((element) => {
+                  data = data.filter(e => e.id !== element.id);        
+                });
+              } 
+              commit("setPhotosTimeline", data);
+              urlParameters.totalPosts = headers['x-wp-total'];
+            }
+          })
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if ( !tags.length ) {
+      try {  
+        await Promise.all([
+          Axios.get(
+            urlGenerator([
+              { type: "endpoint", value: "attachment_tag" },
+              { type: "perPage", value: 100 },
+              { type: "page", value: 1 }
+            ])
+          ).then(({ data }) => {
+            if (data.length) {
+              if (multiGalleryCat) {
+                let multiGalleryTags = [];
+                getters.getPhotosTimeline.forEach((element) => {  
+                  element.attachment_tag.map(e => multiGalleryTags.push(e));
+                });
+                data = data.filter((e) => multiGalleryTags.includes(e.id)); 
+              }
+              data.forEach((element) => {
+                if (element.count > 0) {
+                  tags.push(element);                 
+                }       
               });
-            } 
-            commit("setPhotosTimeline", data);
-            urlParameters.totalPosts = headers['x-wp-total'];
-          }
-        })
-      ]);
-    } catch (error) {
-      console.log(error);
+            }
+            commit("setTags", tags);
+          }),
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
     }
     setTimeout(() => {
       commit("setFetchStatus", false);
@@ -146,13 +190,19 @@ export default {
             { type: "order", value: getters.getOrder }
           ])
         ).then(({ data }) => {
-          if (data.length) { 
+          if (data.length) {
+            if (multiGalleryCat) {            
+              data = data.filter(e => e.attachment_category[0].parent == multiGalleryCat);
+            }
             if ( getters.getSafemode ) {
               getters.getUnsafe.forEach((element) => {
                 data = data.filter(e => e.id !== element.id);       
               });
-            }             
-            commit("setPhotosTimeline", data);
+            }
+            if (data.length) {    
+              commit("setPhotosTimeline", data);
+              urlParameters.totalPosts = data.length;
+            }
           }
         })
       ]);
@@ -243,28 +293,54 @@ export default {
     if ( urlParameters.totalPosts > ( urlParameters.page * urlParameters.perPage ) && !getters.getBackdrop) {
       commit("setFetchStatus", true);
       if (getters.getMode === "fetchAll") {
-        try {
-          await Promise.all([
-            Axios.get(
-              urlGenerator([
-                { type: "endpoint", value: "media" },
-                { type: "page", value: urlParameters.page + 1 },
-                { type: "perPage", value: 20 },
-                { type: "order", value:  getters.getOrder }
-              ])  
-            ).then(({ data }) => {
-              if (data.length) {
-                if ( getters.getSafemode ) {
-                  getters.getUnsafe.forEach((element) => {
-                    data = data.filter(e => e.id !== element.id);
-                  });
-                } 
-                commit("morePhotosTimeline", data);
-              }
-            })
-          ]);
-        } catch (error) {
-          console.log(error);
+        if (multiGalleryCat) {
+          try {
+            await Promise.all([
+              Axios.get(
+                urlGenerator([
+                  { type: "endpoint", value: "media" },
+                  { type: "page", value: urlParameters.page + 1 },
+                  { type: "perPage", value: 20 },
+                  { type: "order", value:  getters.getOrder }
+                ]) + `&attachment_category=${ getters.getAlbums.map(e => Object.keys(e)).toString() }` 
+              ).then(({ data }) => {
+                if (data.length) {
+                  if ( getters.getSafemode ) {
+                    getters.getUnsafe.forEach((element) => {
+                      data = data.filter(e => e.id !== element.id);
+                    });
+                  } 
+                  commit("morePhotosTimeline", data);
+                }
+              })
+            ]);
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          try {
+            await Promise.all([
+              Axios.get(
+                urlGenerator([
+                  { type: "endpoint", value: "media" },
+                  { type: "page", value: urlParameters.page + 1 },
+                  { type: "perPage", value: 20 },
+                  { type: "order", value:  getters.getOrder }
+                ])  
+              ).then(({ data }) => {
+                if (data.length) {
+                  if ( getters.getSafemode ) {
+                    getters.getUnsafe.forEach((element) => {
+                      data = data.filter(e => e.id !== element.id);
+                    });
+                  } 
+                  commit("morePhotosTimeline", data);
+                }
+              })
+            ]);
+          } catch (error) {
+            console.log(error);
+          }
         }
       } else if (getters.getMode === "album") {
         try {
@@ -326,6 +402,9 @@ export default {
               ])
             ).then(({ data }) => {
               if (data.length) {
+                if (multiGalleryCat) {            
+                  data = data.filter(e => e.attachment_category[0].parent == multiGalleryCat);
+                }
                 if ( getters.getSafemode ) {
                   getters.getUnsafe.forEach((element) => {
                     data = data.filter(e => e.id !== element.id);
