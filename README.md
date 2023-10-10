@@ -1,8 +1,8 @@
 # Blockr Photo App
-A photo gallery app made with Vue.js to be used with WordPress based backend, with an option to use blockchain based timestamping by OriginStamp API.
+A photo gallery app made with Vue.js to be used with WordPress based backend, with an option to use blockchain based timestamping by OriginStamp API and multi-gallery support by using a single WP instance.
 Needs a WordPress environment running and a few **[Plugins](https://github.com/henritik/blockr-helper-plugin)** installed.
 
-Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.info/)** (heavily loaded)
+Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.info/)**
 
 ## Features
 
@@ -23,6 +23,7 @@ Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.i
  - Fully responsive design
  - Supports unlimited amount of photos
  - Supports up to 100 albums and tags
+ - Multi-gallery support
 
 ## Packages
 - [@yeger/vue2-masonry-wall](https://github.com/DerYeger/yeger/tree/main/packages/vue2-masonry-wall)
@@ -39,7 +40,6 @@ Live demo: **[https://blockr.henritikkanen.info/](https://blockr.henritikkanen.i
 - Comments and reactions for photos
 - More detailed metadata for photos
 - More detailed instructions and documentations
-- Multi-gallery option for a single WP-instance
 - Support for over 100 albums and tags (limit comes from WP Rest API)
 - Some performance optimization
 
@@ -71,21 +71,20 @@ VUE_APP_API_URL = <!-- The base address for Rest API (if not "wp-json/wp/v2") --
 VUE_APP_UNSAFE_TAG_ID = <!-- The ID of your "unsafe" tag in WP -->
 VUE_APP_ADDITIONAL_FILE_EXTENSION_THUMB = <!-- Additional file extension for thumbnail images (e.g. ".webp"). This is an optional field -->
 VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE = <!-- Additional file extension for large size images (e.g. ".webp"). This is an optional field -->
+VUE_APP_MULTI_GALLERY_CAT_ID = <!-- The ID of your parent attachment category for multi-gallery categories in WP -->
 ```
 
 ### Changelog
 
-#### 1.0.0
-- Initial release
+#### 1.1
+- Added multi-gallery support
+  
+- Minor style improvements
 
-#### 1.0.1
-- Added timeout lock and some other small performance related tweaks for fetchMore function
-
-- Minor performance optimization for Albums component
-
-- Small tweaks for Masonry Wall props
-
-- Option to use additional file extension for image optimization
+#### 1.0.3
+- Minor fixes and clean up
+  
+- Ran npn audit fix for 2 moderate level vulnerabilities
 
 #### 1.0.2
 - Changed full size images in SingleModal view to be "large" size (1024px by default)
@@ -96,10 +95,17 @@ VUE_APP_ADDITIONAL_FILE_EXTENSION_LARGE = <!-- Additional file extension for lar
 
 - Added an option to show caption text in SingleModal view
 
-#### 1.0.3
-- Minor fixes and clean up
-  
-- Ran npn audit fix for 2 moderate level vulnerabilities
+#### 1.0.1
+- Added timeout lock and some other small performance related tweaks for fetchMore function
+
+- Minor performance optimization for Albums component
+
+- Small tweaks for Masonry Wall props
+
+- Option to use additional file extension for image optimization
+
+#### 1.0.0
+- Initial release
 
 ## Credits
 
