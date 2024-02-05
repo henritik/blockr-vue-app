@@ -44,7 +44,7 @@ export default {
         await Promise.all([
           Axios.get(
             urlGenerator([
-              { type: "endpoint", value: "attachment_category" },
+              { type: "endpoint", value: "attachment_categories" },
               { type: "perPage", value: 100 },
               { type: "page", value: 1 }
             ])
@@ -76,7 +76,7 @@ export default {
       try {  
         await Promise.all([
           Axios.get(
-            `${baseURL}/${apiURL}/media?attachment_tag=${unsafeTag}&per_page=100`
+            `${baseURL}/${apiURL}/media?attachment_tags=${unsafeTag}&per_page=100`
           ).then(({ data }) => {          
             if (data.length) {
               commit("setUnsafe", data);
@@ -96,7 +96,7 @@ export default {
               { type: "perPage", value: 20 },
               { type: "page", value: 1 },
               { type: "order", value: getters.getOrder }
-            ]) + `&attachment_category=${ getters.getAlbums.map(e => Object.keys(e)).toString() }`
+            ]) + `&attachment_categories=${ getters.getAlbums.map(e => Object.keys(e)).toString() }`
           ).then(({ data, headers }) => {
             if (data.length) {
               if ( getters.getSafemode ) {
@@ -143,7 +143,7 @@ export default {
         await Promise.all([
           Axios.get(
             urlGenerator([
-              { type: "endpoint", value: "attachment_tag" },
+              { type: "endpoint", value: "attachment_tags" },
               { type: "perPage", value: 100 },
               { type: "page", value: 1 }
             ])
@@ -152,7 +152,7 @@ export default {
               if (multiGalleryCat) {
                 let multiGalleryTags = [];
                 getters.getPhotosTimeline.forEach((element) => {  
-                  element.attachment_tag.map(e => multiGalleryTags.push(e));
+                  element.attachment_tags.map(e => multiGalleryTags.push(e));
                 });
                 data = data.filter((e) => multiGalleryTags.includes(e.id)); 
               }
@@ -192,7 +192,7 @@ export default {
         ).then(({ data }) => {
           if (data.length) {
             if (multiGalleryCat) {            
-              data = data.filter(e => e.attachment_category[0].parent == multiGalleryCat);
+              data = data.filter(e => e.attachment_categories[0].parent == multiGalleryCat);
             }
             if ( getters.getSafemode ) {
               getters.getUnsafe.forEach((element) => {
@@ -223,7 +223,7 @@ export default {
     try {
       await Promise.all([
         Axios.get( 
-          `${baseURL}/${apiURL}/attachment_category/${payload[0].value}`   
+          `${baseURL}/${apiURL}/attachment_categories/${payload[0].value}`   
         ).then(({ data }) => {
           commit("setAlbumInfo", data);
         }),
@@ -233,7 +233,7 @@ export default {
             { type: "perPage", value: 20 },
             { type: "page", value: 1 },
             { type: "order", value: "desc" }
-        ]) + `&attachment_category=${payload[0].value}`    
+        ]) + `&attachment_categories=${payload[0].value}`  
         ).then(({ data, headers }) => {
           if (data.length) {
             if ( getters.getSafemode ) {
@@ -267,7 +267,7 @@ export default {
             { type: "perPage", value: 20 },
             { type: "page", value: 1 },
             { type: "order", value: getters.getOrder }
-          ]) + `&attachment_tag=${payload.toString()}`
+          ]) + `&attachment_tags=${payload.toString()}`
         ).then(({ data, headers }) => {
           if (data.length) {
             if ( getters.getSafemode ) {
@@ -302,7 +302,7 @@ export default {
                   { type: "page", value: urlParameters.page + 1 },
                   { type: "perPage", value: 20 },
                   { type: "order", value:  getters.getOrder }
-                ]) + `&attachment_category=${ getters.getAlbums.map(e => Object.keys(e)).toString() }` 
+                ]) + `&attachment_categories=${ getters.getAlbums.map(e => Object.keys(e)).toString() }` 
               ).then(({ data }) => {
                 if (data.length) {
                   if ( getters.getSafemode ) {
@@ -351,7 +351,7 @@ export default {
                 { type: "page", value: urlParameters.page + 1 },
                 { type: "perPage", value: 20 },
                 { type: "order", value: "desc" }
-              ]) + `&attachment_category=${getters.getAlbumState}`    
+              ]) + `&attachment_categories=${getters.getAlbumState}`
             ).then(({ data }) => {
               if (data.length) {
                 if ( getters.getSafemode ) {
@@ -375,7 +375,7 @@ export default {
                 { type: "page", value: urlParameters.page + 1 },
                 { type: "perPage", value: 20 },
                 { type: "order", value:  getters.getOrder }
-              ]) + `&attachment_tag=${getters.getActiveTags.toString()}`    
+              ]) + `&attachment_tags=${getters.getActiveTags.toString()}`
             ).then(({ data }) => {
               if (data.length) {
                 if ( getters.getSafemode ) {
@@ -403,7 +403,7 @@ export default {
             ).then(({ data }) => {
               if (data.length) {
                 if (multiGalleryCat) {            
-                  data = data.filter(e => e.attachment_category[0].parent == multiGalleryCat);
+                  data = data.filter(e => e.attachment_categories[0].parent == multiGalleryCat);
                 }
                 if ( getters.getSafemode ) {
                   getters.getUnsafe.forEach((element) => {
