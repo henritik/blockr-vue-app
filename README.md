@@ -76,6 +76,9 @@ VUE_APP_MULTI_GALLERY_CAT_ID = <!-- The ID of your parent attachment category fo
 
 ### Changelog
 
+#### 1.1.1
+- Fixed enpoints for attachment categories and tags due to major changes in the Attachment Taxonomies WordPress plugin (versions older than 1.2.0 are no longer supported)
+
 #### 1.1
 - Added multi-gallery support
   
